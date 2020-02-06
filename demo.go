@@ -53,13 +53,15 @@ func GetTickers(symbol string) *Tickers {
   url := http_api_base_url + "/tickers/" + symbol
   resp, err := http.Get(url)
   if err != nil {
-    panic("error: get failed")
+    fmt.Println("error: get failed")
+    return new(Tickers)
   }
   defer resp.Body.Close()
 
   body, err := ioutil.ReadAll(resp.Body)
   if err != nil {
-    panic("error: get failed")
+    fmt.Println("error: get failed")
+    return new(Tickers)
   }
 
   tickers := ToTickers(body)
@@ -70,11 +72,11 @@ func ToTickers(raw []byte) *Tickers {
   var tickers = new(Tickers)
   err := json.Unmarshal(raw, &tickers)
   if err != nil {
-    panic("error: json decode failed")
+    fmt.Println("error: json decode failed")
+    return new(Tickers)
   }
   return tickers
 }
-
 
 func main() {
   tickers := GetTickers("btcusdt")
